@@ -293,9 +293,9 @@
             this.materialLabel8.Location = new System.Drawing.Point(18, 50);
             this.materialLabel8.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel8.Name = "materialLabel8";
-            this.materialLabel8.Size = new System.Drawing.Size(159, 41);
+            this.materialLabel8.Size = new System.Drawing.Size(121, 41);
             this.materialLabel8.TabIndex = 15;
-            this.materialLabel8.Text = "129.000 € ";
+            this.materialLabel8.Text = "1.000 € ";
             // 
             // entidadBindingSource
             // 
@@ -306,7 +306,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(32)))), ((int)(((byte)(0)))));
-            this.ClientSize = new System.Drawing.Size(1172, 215);
+            this.ClientSize = new System.Drawing.Size(1172, 596);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
