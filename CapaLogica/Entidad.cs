@@ -15,6 +15,10 @@ namespace CapaEntidad
         public string _TotalDiario { get; set; }
         public string _TotalPeriodo { get; set; }
         public string _Objetivo { get; set; }
+        public string _MesActual { get; set; }
+        public DataTable curr = new DataTable();
+        public List<ContaTemp> coTemp = new List<ContaTemp>();
+
 
     }
 }
