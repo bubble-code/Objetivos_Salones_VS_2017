@@ -9,8 +9,8 @@ namespace CapaDatos
     {
         private string stringConnection;
         string mesActual, ConsulTotalDiario, hoy;
-        string periodoActual = $"SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL FROM JugadasDia  WHERE Val(Format(Fecha,'MM'))>=  Val(01) and Val(Format(Fecha,'YYYY'))>=  Val(2022)";
-        string trimestre = $"SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL FROM JugadasDia  WHERE Format(Fecha,'yyyy-MM-dd') <= Format('2022-01-01','yyyy-MM-dd')";
+        string periodoActual = $"SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL FROM JugadasDia  WHERE Val(Format(Fecha,'MM'))>=  Val(04) and Val(Format(Fecha,'YYYY'))>=  Val(2022)";
+        string trimestre = $"SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL FROM JugadasDia  WHERE Format(Fecha,'yyyy-MM-dd') <= Format('2022-04-01','yyyy-MM-dd')";
         string mes;
         string curre = "select IdMaquina, TotalEntradas, TotalSalidas, Diferencia, FechaDesde from ContabilidadTmp";
 

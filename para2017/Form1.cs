@@ -13,11 +13,22 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Google.Cloud.Firestore;
+using System.Data.SqlClient;
+using Gewetes.Class.Connection;
 
 namespace para2017
 {
     public partial class Form1 : Form
     {
+        readonly SqlConnectionStringBuilder Alcobendas = new SqlConnectionStringBuilder
+        {
+            DataSource = "2.136.192.129,51304",
+            UserID = "logs",
+            Password = "af532a8f8b",
+            InitialCatalog = "SIRIUS",
+
+        };
         string paht="";
         public Form1()
         {
@@ -53,9 +64,9 @@ namespace para2017
                             try
                             {
                                 Negocio neg = new Negocio(enti, paht);
-                                materialLabel1.Text = enti._TotalDiario != null ? double.Parse(enti._TotalDiario).ToString("#,##0.00") : "";
-                                materialLabel6.Text = enti._TotalPeriodo != null ? double.Parse(enti._TotalPeriodo).ToString("#,##0.00") : "";
-                                materialLabel4.Text = enti._MesActual != null ? double.Parse(enti._MesActual).ToString("#,##0.00") : "";
+                                label11.Text = enti._TotalDiario != null ? double.Parse(enti._TotalDiario).ToString("#,##0.00") : "";
+                                label17.Text = enti._TotalPeriodo != null ? double.Parse(enti._TotalPeriodo).ToString("#,##0.00") : "";
+                                label14.Text = enti._MesActual != null ? double.Parse(enti._MesActual).ToString("#,##0.00") : "";
                             }
                             catch
                             {
@@ -88,8 +99,8 @@ namespace para2017
             openFileDialog1.Filter = "Access 2000-2003 (*.mdb)| *.mdb";
             openFileDialog1.Title = "Por favor selecciona la base de datos";
             openFileDialog1.CheckFileExists = true;
-            openFileDialog1.CheckPathExists = true;
-            DialogResult dr = openFileDialog1.ShowDialog();
+            openFileDialog1.CheckPathExists = true;  
+            DialogResult dr = openFileDialog1.ShowDialog(); 
             if (dr == DialogResult.OK)
             {
                 paht = openFileDialog1.FileName;                
@@ -107,5 +118,170 @@ namespace para2017
         {
 
         }
+
+        private void materialButton1_Click_1(object sender, EventArgs e)
+        {
+            dataGridView1.Rows.Clear();
+            dataGridView2.Rows.Clear();
+            dataGridView3.Rows.Clear();
+            fetchData(Alcobendas);
+        }
+        //=======================================================
+        // Logica
+        //=======================================================
+        private void fetchData(SqlConnectionStringBuilder conectioString)
+        {
+            Consultas cc = new Consultas();
+            CsLogin login = new CsLogin(conectioString);
+            //List<Stock> listStock = new List<Stock>();
+            //List<Stock> listCashBox = new List<Stock>();
+            //List<Ticket> listTicket = new List<Ticket>();
+            //List<Tecnausa> listTecnausa = new List<Tecnausa>();
+            float total = 0;
+            float filo = 0;
+            DataSet dataSet = new DataSet();
+            if (login._ErrorCode == 0)
+            {
+                //cashBox
+                login._cmd = new SqlCommand(cc.cashbox, login._con);
+                login._ad = new SqlDataAdapter(login._cmd);
+                login._ad.Fill(dataSet, "cashBox");
+                //Stock
+                login._cmd = new SqlCommand(cc.stock, login._con);
+                login._ad = new SqlDataAdapter(login._cmd);
+                login._ad.Fill(dataSet, "stock");
+                //Tickets
+                login._cmd = new SqlCommand(cc.ticket, login._con);
+                login._ad = new SqlDataAdapter(login._cmd);
+                login._ad.Fill(dataSet, "ticket");
+                //Tecnausa
+                //login._cmd = new SqlCommand(cc.tecnausa, login._con);
+                //login._ad = new SqlDataAdapter(login._cmd);
+                //login._ad.Fill(dataSet, "tecnausa");
+                //Fill dataGridView
+                foreach (DataRow ele in dataSet.Tables["stock"].Rows)
+                {
+                    var idex = dataGridView1.Rows.Add(ele["TYPE"].ToString(), ele["CANT"].ToString(), ele["VALUE"]);
+                    switch (float.Parse(ele["TYPE"].ToString()))
+                    {
+                        case 50:
+                            if (Int32.Parse(ele["CANT"].ToString()) < 200)
+                            {
+                                dataGridView1.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(217, 136, 128);
+                            }
+                            break;
+                        case 20:
+                            if (Int32.Parse(ele["CANT"].ToString()) < 250)
+                            {
+                                dataGridView1.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(217, 136, 128);
+                            }
+                            break;
+                        case 10:
+                            if (Int32.Parse(ele["CANT"].ToString()) < 20)
+                            {
+                                dataGridView1.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(217, 136, 128);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    if (ele["TYPE"].ToString() == "50")
+                    {
+
+                    }
+                    //listStock.Add(new Stock() { TYPE = ele["TYPE"].ToString(), CANT = ele["CANT"].ToString(), VALUE = ele["VALUE"].ToString()});
+                    total += float.Parse(ele["VALUE"].ToString());
+                }
+                dataGridView1.Rows.Add("TOTAL", "", total);
+                dataGridView1.Rows[dataGridView1.RowCount - 1].Cells["VALUE"].Style.BackColor = Color.FromArgb(214, 234, 248);
+                filo += total;
+                total = 0;
+                //var bindingList = new BindingList<Stock>(listStock);
+                //var source = new BindingSource(bindingList, null);
+                //dataGridView1.DataSource = source;
+                //dataGridView1.Columns["VALUE"].DefaultCellStyle.Format = "#.#,##";
+
+                //CASHBOX
+                foreach (DataRow ele in dataSet.Tables["cashBox"].Rows)
+                {
+                    dataGridView2.Rows.Add(ele["TYPE"].ToString(), ele["CANT"].ToString(), ele["VALUE"]);
+                    total += float.Parse(ele["VALUE"].ToString());
+                }
+                dataGridView2.Rows.Add("TOTAL", "", total);
+                dataGridView2.Rows[dataGridView2.RowCount - 1].Cells[2].Style.BackColor = Color.FromArgb(214, 234, 248);
+                filo += total;
+                total = 0;
+                //dataGridView2.Rows[dataGridView2.RowCount - 1].Cells["TOTAL"].Style.BackColor = Color.FromArgb(214, 234, 248);
+                //Y
+                //TICKET
+
+                foreach (DataRow ele in dataSet.Tables["ticket"].Rows)
+                {
+                    dataGridView3.Rows.Add(ele["TYPE"].ToString(), ele["TOTAL"]);
+                    total += float.Parse(ele["TOTAL"].ToString());
+                }
+                dataGridView3.Rows.Add("TOTAL", total);
+                dataGridView3.Rows[dataGridView3.RowCount - 1].Cells[1].Style.BackColor = Color.FromArgb(214, 234, 248);
+                //dataGridView3.Columns["TOTAL"].DefaultCellStyle.Format = "#.#,##";
+                filo += total;
+                //Tecnausa
+                //var sourcerTecnausa = new BindingSource();
+                //foreach (DataRow ele in dataSet.Tables["tecnausa"].Rows)
+                //{
+                //    dataGridView3.Rows.Add(ele["TTimeStamp"].ToString(), ele["MachineNumber"].ToString(), ele["TEXT"].ToString(), ele["Betrag"]);
+
+                //    // sourcerTecnausa.Add(new Tecnausa() { date = ele["TTimeStamp"].ToString(), qualification = ele["TEXT"].ToString(), pay = ele["Betrag"].ToString() });
+                //    //listTecnausa.Add(new Tecnausa() { date = ele["TTimeStamp"].ToString(), qualification = ele["TEXT"].ToString(), pay = ele["Betrag"].ToString() });
+                //}
+                //dataGridView3.Columns[2].DefaultCellStyle.Format = "C2";
+                label10.Text = filo.ToString();
+                //var bindinTecnausa = new BindingList<Tecnausa>(listTecnausa);
+                // tecnausa.DataSource = sourcerTecnausa;
+                //dataGridView1.DataSource = dataSet.Tables["stock"];
+                //dataGridView2.DataSource = dataSet.Tables["ticket"];
+                //dataGridView3.DataSource = dataSet.Tables["cashbox"];
+
+                //MessageBox.Show("Login Ok");
+            }
+            else
+            {
+                MessageBox.Show(login._ErrorMsg);
+            }
+        }
+
+        //private async void button1_Click (object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        string path = AppDomain.CurrentDomain.BaseDirectory + @"keyFireStore.json";
+        //        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
+        //        FirestoreDb db = FirestoreDb.Create("fluttergewete");
+        //         Query dbref = db.Collection("users").Document("aobregon@merkur-casino.com").Collection("salones");
+
+        //        QuerySnapshot snap = await dbref.GetSnapshotAsync();
+        //        foreach(DocumentSnapshot docsnap in snap)
+        //        {
+        //            if (docsnap.Exists)
+        //            {
+        //                richTextBox1.Text += "[Salon Name: " + docsnap.Id + "]\n";
+        //            }
+        //        }
+        //        //if (este.Exists)
+        //        //{
+        //        //    Dictionary<string, object> datas = este.ToDictionary();
+        //        //    foreach(var item in datas)
+        //        //    {
+        //        //        richTextBox1.Text += string.Format("{0}:{1}\n", item.Key, item.Value);
+
+        //        //    }
+        //        //}
+        //        MessageBox.Show("bien");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString());
+        //    }
+
+        //}
     }
 }
