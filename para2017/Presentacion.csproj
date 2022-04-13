@@ -163,6 +163,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TranspDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -206,6 +209,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="layout_set_logo-removebg-preview.ico" />
+    <None Include="Resources\BackGround1.jpg" />
+    <None Include="Resources\Logo Merkur Slots Quer neg 4c - copia.png" />
     <None Include="Resources\backImagen.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

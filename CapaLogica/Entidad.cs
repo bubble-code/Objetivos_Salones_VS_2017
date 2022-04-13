@@ -17,7 +17,9 @@ namespace CapaEntidad
         public string _Objetivo { get; set; }
         public string _MesActual { get; set; }
         public DataTable curr = new DataTable();
+        public DataTable _EstadoMaquina = new DataTable();
         public List<ContaTemp> coTemp = new List<ContaTemp>();
+        public Dictionary<int, double> rankingMaquina = new Dictionary<int, double>();
 
 
     }

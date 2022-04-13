@@ -2,6 +2,9 @@
 using System.Data.OleDb;
 using CapaEntidad;
 using System.Data;
+using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CapaDatos
 {
@@ -9,11 +12,12 @@ namespace CapaDatos
     {
         private string stringConnection;
         string mesActual, ConsulTotalDiario, hoy;
-        string periodoActual = $"SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL FROM JugadasDia  WHERE Val(Format(Fecha,'MM'))>=  Val(04) and Val(Format(Fecha,'YYYY'))>=  Val(2022)";
-        string trimestre = $"SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL FROM JugadasDia  WHERE Format(Fecha,'yyyy-MM-dd') <= Format('2022-04-01','yyyy-MM-dd')";
+        readonly string periodoActual = $"SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL FROM JugadasDia  WHERE Val(Format(Fecha,'MM'))>=  Val(04) and Val(Format(Fecha,'YYYY'))>=  Val(2022)";
+        //string trimestre = $"SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL FROM JugadasDia  WHERE Format(Fecha,'yyyy-MM-dd') <= Format('2022-04-01','yyyy-MM-dd')";
         string mes;
-        string curre = "select IdMaquina, TotalEntradas, TotalSalidas, Diferencia, FechaDesde from ContabilidadTmp";
-
+        readonly string curre = "select IdMaquina, TotalEntradas, TotalSalidas, Diferencia, FechaDesde from ContabilidadTmp";
+        readonly string moduleMaquina = "SELECT  Modulo, IdMaquina from Maquinas WHERE Borrado=FALSE ORDER BY Modulo";
+        readonly string totalMaquinPeriodo = "SELECT SUM(Entradas)-SUM(Salidas) AS TOTAL, IdMaquina FROM JugadasDia  WHERE Val(Format(Fecha,'MM'))>=Val(04) and Val(Format(Fecha,'YYYY'))>=Val(2022) GROUP BY IdMaquina";
 
 
         public OleDbConnection _con { get; set; }
@@ -91,9 +95,46 @@ namespace CapaDatos
             }
             _ad.Fill(_DiarioDataSet, "CC");
             en.curr = _DiarioDataSet.Tables["Curr"];
+            
             var ff = _DiarioDataSet;
 
             //en.curr = _DiarioDataSet;
+        }
+        public void getRankingMaquina(Entidad en)
+        {
+            try
+            {
+                _cmd = new OleDbCommand(moduleMaquina, _con);
+                _ad = new OleDbDataAdapter(_cmd);
+                _ad.Fill(_DiarioDataSet, "ModuloMaquina");
+                en._EstadoMaquina = _DiarioDataSet.Tables["ModuloMaquina"];
+                //-----------------
+                _cmd = new OleDbCommand(totalMaquinPeriodo, _con);
+                _ad = new OleDbDataAdapter(_cmd);
+                _ad.Fill(_DiarioDataSet, "TotalMaquinaPeriodo");
+               
+            }
+            catch( Exception ex)
+            {
+                en._ErrorCode = ex.HResult;
+                en._ErrorMsg = ex.Message;
+                MessageBox.Show(en._ErrorMsg);
+            }
+            DataTable MaquinaPeriodo = _DiarioDataSet.Tables["TotalMaquinaPeriodo"];
+            Dictionary<int,double> dicc = new Dictionary<int, double>();
+            Dictionary<int, int> diccModule = new Dictionary<int, int>();
+            DataTable moduleTable = _DiarioDataSet.Tables["ModuloMaquina"];
+
+            for (int x = 0; x < moduleTable.Rows.Count; x++)
+            {
+                diccModule.Add(Int32.Parse(moduleTable.Rows[x]["IdMaquina"].ToString()), Int32.Parse(moduleTable.Rows[x]["Modulo"].ToString()));
+            }
+            for (int x = 0; x < MaquinaPeriodo.Rows.Count; x++)
+            {
+                dicc.Add(diccModule[Int32.Parse(MaquinaPeriodo.Rows[x]["IdMaquina"].ToString())], double.Parse(MaquinaPeriodo.Rows[x]["TOTAL"].ToString()));
+            }
+
+            en.rankingMaquina = dicc.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
 
     }

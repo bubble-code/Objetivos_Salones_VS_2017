@@ -15,6 +15,7 @@ namespace CapaNegocio
                 accesBD.getPeriodo(En);
                 accesBD.getMes(En);
                 accesBD.getCurrent(En);
+                accesBD.getRankingMaquina(En);
             }
             
             

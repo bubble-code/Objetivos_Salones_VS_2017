@@ -63,6 +63,16 @@ namespace para2017.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BackGround1 {
+            get {
+                object obj = ResourceManager.GetObject("BackGround1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap backImagen {
             get {
                 object obj = ResourceManager.GetObject("backImagen", resourceCulture);
@@ -76,6 +86,16 @@ namespace para2017.Properties {
         internal static System.Drawing.Bitmap layout_set_logo_removebg_preview {
             get {
                 object obj = ResourceManager.GetObject("layout_set_logo-removebg-preview", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Logo_Merkur_Slots_Quer_neg_4c___copia {
+            get {
+                object obj = ResourceManager.GetObject("Logo Merkur Slots Quer neg 4c - copia", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
