@@ -18,21 +18,21 @@ namespace para2017
         }
         protected override void PaintBackground(Graphics graphics, Rectangle clipBounds, Rectangle gridBounds)
         {
-            graphics.Clear(Color.FromArgb(230, Color.DarkTurquoise));
+            graphics.Clear(Color.FromArgb(64,64,64));
             SetCellsTransparent();
 
             GraphicsPath graphicsPath = new GraphicsPath();
             graphicsPath.AddRectangle(new Rectangle(-this.Location.X, -this.Location.Y, Parent.ClientRectangle.Width, Parent.ClientRectangle.Height));
 
             //PathGradientBrush pathGradientBrush = new PathGradientBrush(graphicsPath);
-           Color customColor = Color.FromArgb(230, Color.Black);
+           Color customColor = Color.Transparent;
             //Color customColor = Color.Transparent;
             SolidBrush shadowBrush = new SolidBrush(customColor);
             //pathGradientBrush.CenterColor = Color.FromArgb(105, 88, 44);
             //Color[] colors = { Color.FromArgb(250,36, 30, 15) };
             //pathGradientBrush.SurroundColors = colors;
             
-            graphics.FillRectangle(shadowBrush, gridBounds);
+            //graphics.FillRectangle(shadowBrush, gridBounds);
         }
         public void SetCellsTransparent()
         {

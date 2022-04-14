@@ -29,7 +29,111 @@ namespace para2017
             InitialCatalog = "SIRIUS",
 
         };
-        string paht="";
+        readonly SqlConnectionStringBuilder Oca22 = new SqlConnectionStringBuilder
+        {
+            DataSource = "2.136.188.147,51304",
+            UserID = "logs",
+            Password = "ecb347f134",
+            InitialCatalog = "SIRIUS",
+
+        };
+        readonly SqlConnectionStringBuilder Alcala260 = new SqlConnectionStringBuilder
+        {
+            DataSource = "192.168.1.120,51304",
+            UserID = "logs",
+            Password = "3df622ddba",
+            InitialCatalog = "SIRIUS",
+
+        };
+        readonly SqlConnectionStringBuilder Alcala610 = new SqlConnectionStringBuilder
+        {
+            DataSource = "192.168.1.120,51304",
+            UserID = "logs",
+            Password = "54382df704",
+            InitialCatalog = "SIRIUS",
+
+        };      
+        readonly SqlConnectionStringBuilder Carabanchel = new SqlConnectionStringBuilder
+        {
+            DataSource = "2.136.77.49,51304",
+            UserID = "logs",
+            Password = "90ee68111d",
+            InitialCatalog = "SIRIUS",
+
+        };
+        readonly SqlConnectionStringBuilder Mejorada = new SqlConnectionStringBuilder
+        {
+            DataSource = "2.136.163.107,51304",
+            UserID = "logs",
+            Password = "d70f0ed829",
+            InitialCatalog = "SIRIUS",
+
+        };
+        readonly SqlConnectionStringBuilder Villanueva = new SqlConnectionStringBuilder
+        {
+            DataSource = "2.136.80.122,51304",
+            UserID = "logs",
+            Password = "11f90d8d24",
+            InitialCatalog = "SIRIUS",
+
+        };
+
+        //Santander
+        readonly SqlConnectionStringBuilder Santander = new SqlConnectionStringBuilder
+        {
+            DataSource = "2.136.189.233,51304",
+            UserID = "logs",
+            Password = "571bb914e5",
+            InitialCatalog = "SIRIUS",
+
+        };
+        //Torrelavega
+        readonly SqlConnectionStringBuilder Torrelavega = new SqlConnectionStringBuilder
+        {
+            DataSource = "2.136.113.102,51304",
+            UserID = "logs",
+            Password = "815065777e",
+            InitialCatalog = "SIRIUS",
+
+        };
+        //Santoña
+        readonly SqlConnectionStringBuilder Santoña = new SqlConnectionStringBuilder
+        {
+            DataSource = "188.85.1.96,51304",
+            UserID = "logs",
+            Password = "24ddb1cbc7",
+            InitialCatalog = "SIRIUS",
+
+        };
+        readonly SqlConnectionStringBuilder Tropicana = new SqlConnectionStringBuilder
+        {
+            DataSource = "83.48.110.215,51304",
+            UserID = "logs",
+            Password = "ff0fcab1c9",
+            InitialCatalog = "SIRIUS",
+        };
+        readonly SqlConnectionStringBuilder Riviera = new SqlConnectionStringBuilder
+        {
+            DataSource = "83.48.110.215,51304",
+            UserID = "logs",
+            Password = "ff0fcab1c9",
+            InitialCatalog = "SIRIUS",
+        };
+        readonly SqlConnectionStringBuilder Fortuna = new SqlConnectionStringBuilder
+        {
+            DataSource = "83.48.112.176,51304",
+            UserID = "logs",
+            Password = "fbdce170b2",
+            InitialCatalog = "SIRIUS",
+        };
+        readonly SqlConnectionStringBuilder Malibu = new SqlConnectionStringBuilder
+        {
+            DataSource = "192.168.0.120,51304",
+            UserID = "logs",
+            Password = "7d2781103d",
+            InitialCatalog = "SIRIUS",
+        };
+        string paht= "C:\\ProgramData\\Tecnausa\\Gran Bolsa\\Bolsa.mdb";
         public Form1()
         {
             InitializeComponent();
@@ -87,14 +191,21 @@ namespace para2017
         
         private void machineState(Dictionary<int, double> rankMaqui)
         {
-            int alpha = 250;
-            for(int y=0; y <= 24; y++)
+            try
             {
-                dataGridView1.Rows[0].Cells[y].Value = rankMaqui.ElementAt(y).Key;
-                dataGridView1.Rows[0].Cells[y].Style.BackColor = Color.FromArgb(29, 19, alpha);
-                alpha -= 8;
-                //dataGridView1.Rows[x].Cells[y].Style.BackColor = tableState.Rows[y]["EstadoModulo"].ToString() == "1" ? Color.DarkGreen : Color.DarkRed;
+                int alpha = 250;
+                for (int y = 0; y <= 24; y++)
+                {
+                    dataGridView1.Rows[0].Cells[y].Value = rankMaqui.ElementAt(y).Key;
+                    dataGridView1.Rows[0].Cells[y].Style.BackColor = Color.FromArgb(29, 19, alpha);
+                    alpha -= 8;
+                    //dataGridView1.Rows[x].Cells[y].Style.BackColor = tableState.Rows[y]["EstadoModulo"].ToString() == "1" ? Color.DarkGreen : Color.DarkRed;
+                }
+            }catch(Exception ex)
+            {
+
             }
+           
             
           
         }
@@ -121,19 +232,24 @@ namespace para2017
             {
                 paht = openFileDialog1.FileName;                
             }
+            MessageBox.Show(openFileDialog1.FileName);
         }
 
         private void comenzarToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            if (isStart)
-                GetData();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             dataGridView1.ColumnCount = 25;
             dataGridView1.RowCount = 2;
+            if (isStart)
+            {
+                GetData();
+            }
+                
         }
 
         private void materialButton1_Click_1(object sender, EventArgs e)
@@ -141,7 +257,7 @@ namespace para2017
             transpDataGridView3.Rows.Clear();
             transpDataGridView2.Rows.Clear();
             transpDataGridView1.Rows.Clear();            
-            fetchData(Alcobendas);
+            fetchData(Santander);
         }
         //=======================================================
         // Logica
@@ -184,19 +300,19 @@ namespace para2017
                         case 50:
                             if (Int32.Parse(ele["CANT"].ToString()) < 200)
                             {
-                                transpDataGridView3.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(217, 136, 128);
+                                transpDataGridView3.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(250, 20, 20);
                             }
                             break;
                         case 20:
                             if (Int32.Parse(ele["CANT"].ToString()) < 250)
                             {
-                                transpDataGridView3.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(217, 136, 128);
+                                transpDataGridView3.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(250, 20, 20);
                             }
                             break;
                         case 10:
                             if (Int32.Parse(ele["CANT"].ToString()) < 20)
                             {
-                                transpDataGridView3.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(217, 136, 128);
+                                transpDataGridView3.Rows[idex].Cells[2].Style.BackColor = Color.FromArgb(250, 20, 20);
                             }
                             break;
                         default:
@@ -265,6 +381,11 @@ namespace para2017
             {
                 MessageBox.Show(login._ErrorMsg);
             }
+        }
+
+        private void fILEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         //private async void button1_Click (object sender, EventArgs e)
