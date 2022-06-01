@@ -90,7 +90,7 @@ namespace para2017
         //Torrelavega
         readonly SqlConnectionStringBuilder Torrelavega = new SqlConnectionStringBuilder
         {
-            DataSource = "2.136.113.102,51304",
+            DataSource = "192.168.0.120,51304",
             UserID = "logs",
             Password = "815065777e",
             InitialCatalog = "SIRIUS",
@@ -99,29 +99,65 @@ namespace para2017
         //Santoña
         readonly SqlConnectionStringBuilder Santoña = new SqlConnectionStringBuilder
         {
-            DataSource = "188.85.1.96,51304",
+            DataSource = "192.168.1.120,51304",
             UserID = "logs",
             Password = "24ddb1cbc7",
             InitialCatalog = "SIRIUS",
 
         };
+        //Tudela
+        readonly SqlConnectionStringBuilder Tudela = new SqlConnectionStringBuilder
+        {
+            DataSource = "83.48.30.30,51304",
+            UserID = "logs",
+            Password = "1ad58910e2",
+            InitialCatalog = "SIRIUS",
+
+        };
+        //Alsasua
+        readonly SqlConnectionStringBuilder Alsasua = new SqlConnectionStringBuilder
+        {
+            DataSource = "2.136.163.103,51304",
+            UserID = "logs",
+            Password = "475096f01f",
+            InitialCatalog = "SIRIUS",
+
+        };
+        //Mendevaldea
+        readonly SqlConnectionStringBuilder Mendevaldea = new SqlConnectionStringBuilder
+        {
+            DataSource = "192.168.1.120,51304",
+            UserID = "logs",
+            Password = "260d461305",
+            InitialCatalog = "SIRIUS",
+
+        };
+        //Olite
+        readonly SqlConnectionStringBuilder Olite = new SqlConnectionStringBuilder
+        {
+            DataSource = "192.168.1.120,51304",
+            UserID = "logs",
+            Password = "770be0b60a",
+            InitialCatalog = "SIRIUS",
+
+        };
         readonly SqlConnectionStringBuilder Tropicana = new SqlConnectionStringBuilder
         {
-            DataSource = "83.48.110.215,51304",
+            DataSource = "192.168.0.120,51304",
             UserID = "logs",
             Password = "ff0fcab1c9",
             InitialCatalog = "SIRIUS",
         };
         readonly SqlConnectionStringBuilder Riviera = new SqlConnectionStringBuilder
         {
-            DataSource = "83.48.110.215,51304",
+            DataSource = "192.168.0.120,51304",
             UserID = "logs",
             Password = "ff0fcab1c9",
             InitialCatalog = "SIRIUS",
         };
         readonly SqlConnectionStringBuilder Fortuna = new SqlConnectionStringBuilder
         {
-            DataSource = "83.48.112.176,51304",
+            DataSource = "192.168.0.120,51304",
             UserID = "logs",
             Password = "fbdce170b2",
             InitialCatalog = "SIRIUS",
@@ -133,7 +169,9 @@ namespace para2017
             Password = "7d2781103d",
             InitialCatalog = "SIRIUS",
         };
-        string paht= "C:\\ProgramData\\Tecnausa\\Gran Bolsa\\Bolsa.mdb";
+        //string paht = "C:\\Users\\g401897\\Desktop\\Bolsa.mdb";
+        string paht = "C:\\ProgramData\\Tecnausa\\Gran Bolsa\\Bolsa.mdb";
+        //string paht = "C:\\Users\\g401897\\Desktop\\Bolsa.mdb"; 
         public Form1()
         {
             InitializeComponent();
@@ -172,10 +210,14 @@ namespace para2017
                                 label17.Text = enti._TotalPeriodo != null ? double.Parse(enti._TotalPeriodo).ToString("#,##0.00") : "";
                                 label14.Text = enti._MesActual != null ? double.Parse(enti._MesActual).ToString("#,##0.00") : "";                                
                                 machineState(enti.rankingMaquina);
+                                transpDataGridView3.Rows.Clear();
+                                transpDataGridView2.Rows.Clear();
+                                transpDataGridView1.Rows.Clear();
+                                fetchData(Alcobendas);
                             }
                             catch
                             {
-                                MessageBox.Show(enti._ErrorMsg);                            }
+                                MessageBox.Show(enti._ErrorCode.ToString());                            }
                             
                         }));
                     }
@@ -223,16 +265,7 @@ namespace para2017
 
         private void openDBToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "Access 2000-2003 (*.mdb)| *.mdb";
-            openFileDialog1.Title = "Por favor selecciona la base de datos";
-            openFileDialog1.CheckFileExists = true;
-            openFileDialog1.CheckPathExists = true;  
-            DialogResult dr = openFileDialog1.ShowDialog(); 
-            if (dr == DialogResult.OK)
-            {
-                paht = openFileDialog1.FileName;                
-            }
-            MessageBox.Show(openFileDialog1.FileName);
+           
         }
 
         private void comenzarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -248,6 +281,10 @@ namespace para2017
             if (isStart)
             {
                 GetData();
+                transpDataGridView3.Rows.Clear();
+                transpDataGridView2.Rows.Clear();
+                transpDataGridView1.Rows.Clear();
+                fetchData(Alcobendas);
             }
                 
         }
@@ -257,7 +294,7 @@ namespace para2017
             transpDataGridView3.Rows.Clear();
             transpDataGridView2.Rows.Clear();
             transpDataGridView1.Rows.Clear();            
-            fetchData(Santander);
+            fetchData(Fortuna);
         }
         //=======================================================
         // Logica
@@ -318,10 +355,7 @@ namespace para2017
                         default:
                             break;
                     }
-                    if (ele["TYPE"].ToString() == "50")
-                    {
-
-                    }
+                   
                     //listStock.Add(new Stock() { TYPE = ele["TYPE"].ToString(), CANT = ele["CANT"].ToString(), VALUE = ele["VALUE"].ToString()});
                     total += float.Parse(ele["VALUE"].ToString());
                 }
@@ -386,6 +420,23 @@ namespace para2017
         private void fILEToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+       
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Access 2000-2003 (*.mdb)| *.mdb";
+            openFileDialog1.Title = "Por favor selecciona la base de datos";
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.CheckPathExists = true;
+            DialogResult dr = openFileDialog1.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                paht = openFileDialog1.FileName;
+            }
+            MessageBox.Show(openFileDialog1.FileName);
+       
         }
 
         //private async void button1_Click (object sender, EventArgs e)
